@@ -1,37 +1,35 @@
 import { ReproduceRule } from "./ReproduceRule";
 
 describe("ReproduceRule", () => {
-  it("should apply if the cell is alive", () => {
-    const rule = new ReproduceRule();
-
-    const result = rule.applies(true);
-
-    expect(result).toBeTruthy();
-  });
-
-  it("should not apply if the cell is dead", () => {
+  it("should apply if the cell is dead", () => {
     const rule = new ReproduceRule();
 
     const result = rule.applies(false);
 
+    expect(result).toBeTruthy();
+  });
+
+  it("should not apply if the cell is alive", () => {
+    const rule = new ReproduceRule();
+
+    const result = rule.applies(true);
+
     expect(result).toBeFalsy();
   });
 
-  it("should live if the cell has 2 or 3 neighbours ", () => {
+  it("should live in the next generation if number of living neighbours is exactly 3", () => {
     const rule = new ReproduceRule();
 
-    const result1 = rule.shouldLive(3);
-    const result2 = rule.shouldLive(2);
+    const result = rule.shouldLive(3);
 
-    expect(result1).toBeTruthy();
-    expect(result2).toBeTruthy();
+    expect(result).toBeTruthy();
   });
 
-  it("should  not live if the cell does not have 2 or 3 neighbours", () => {
+  it("should not live in the next generation if number of living neighbours is not 3", () => {
     const rule = new ReproduceRule();
-    const result1 = rule.shouldLive(4);
-    const result2 = rule.shouldLive(1);
-    expect(result1).toBeFalsy();
-    expect(result2).toBeFalsy();
+
+    const result = rule.shouldLive(1);
+
+    expect(result).toBeFalsy();
   });
 });

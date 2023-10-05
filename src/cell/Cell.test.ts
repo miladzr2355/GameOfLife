@@ -1,33 +1,27 @@
 import { Cell } from "./Cell";
 
 describe("Cell", () => {
-  it("should have correct default value when instantiated", () => {
-    // arrange
-    const cell = new Cell();
+	it("should have correct default value when instantiated", () => {
+		const cell = new Cell();
 
-    // act
-    const result = cell.isAlive();
+		const result = cell.isAlive();
 
-    // assert
-    expect(result).toBeFalsy();
-  });
+		expect(result).toBeFalsy();
+	});
 
-  it("should have correct default value when instantiated", () => {
-    // arrange
-    const cell = new Cell(true);
+	it("should have correct default value when instantiated", () => {
+		const cell = new Cell(true);
 
-    // act
-    const result = cell.isAlive();
+		const result = cell.isAlive();
 
-    // assert
-    expect(result).toBeTruthy();
-  });
+		expect(result).toBeTruthy();
+	});
 
-  it("should be able to toggle living state", () => {
-    const cell = new Cell();
+	it("should be able to toggle living state", () => {
+		const cell = new Cell();
 
-    cell.toggleLivingStatus();
+		cell.toggleLivingStatus();
 
-    expect(cell.isAlive()).toBeTruthy();
-  });
+		expect(cell.isAlive()).toBeTruthy();
+	});
 });

@@ -27,7 +27,9 @@ describe("OverPopulationRule", () => {
 
   it("should live if the cell has less than four living neighbours", () => {
     const rule = new OverPopulationRule();
+
     const result = rule.shouldLive(3);
+    
     expect(result).toBeTruthy();
   });
 });

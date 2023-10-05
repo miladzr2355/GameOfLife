@@ -25,5 +25,8 @@
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/"
     ]
+  },
+  "dependencies": {
+    "wallaby": "^1.0.1"
   }
 }
