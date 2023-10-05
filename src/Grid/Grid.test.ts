@@ -1,4 +1,4 @@
-import { Grid } from "./Grid";
+import { Grid } from "../grid/Grid";
 
 describe("Grid", () => {
     const numRows = 3;
