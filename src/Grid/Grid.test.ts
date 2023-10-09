@@ -15,4 +15,38 @@ describe("Grid", () => {
 
         expect(cell.isAlive()).toBeFalsy();
     });
+
+    it("should return correct number of neighbors for a corner cell", () => {
+        const neighbors = grid.getNeighbors(0, 0);
+        
+        expect(neighbors).toHaveLength(3);
+    });
+
+    it("should return correct neighbors for a corner cell", () => {
+        const neighbors = grid.getNeighbors(0, 0);
+        
+        expect(neighbors).toContain(grid.getCell(0, 1));
+        expect(neighbors).toContain(grid.getCell(1, 0));
+        expect(neighbors).toContain(grid.getCell(1, 1));
+    });
+    
+    it("should return correct number of neighbors for an interior cell", () => {
+        const neighbors = grid.getNeighbors(1, 1);
+        
+        expect(neighbors).toHaveLength(8);
+    });
+
+    it("should return correct neighbors for an interior cell", () => {
+        const neighbors = grid.getNeighbors(1, 1);
+        
+        expect(neighbors).toContain(grid.getCell(0, 0));
+        expect(neighbors).toContain(grid.getCell(0, 1));
+        expect(neighbors).toContain(grid.getCell(0, 2));
+        expect(neighbors).toContain(grid.getCell(1, 0));
+        expect(neighbors).toContain(grid.getCell(1, 2));
+        expect(neighbors).toContain(grid.getCell(2, 0));
+        expect(neighbors).toContain(grid.getCell(2, 1));
+        expect(neighbors).toContain(grid.getCell(2, 2));
+    });
+
 });
