@@ -1,16 +1,19 @@
 import { Cell } from "../cell/Cell";
+import { GridBoundaryChecker } from "../utility/GridBoundaryChecker";
 
 export class Grid {
     private cells: Cell[][];
+    private boundaryChecker: GridBoundaryChecker;
 
-    constructor(rows: number, cols: number) {
+    constructor(rows: number, cols: number, initialProbability: number = 0.5) {
         this.cells = new Array(rows);
+        this.boundaryChecker = new GridBoundaryChecker(rows, cols);
     
         for (let i = 0; i < rows; i++) {
             this.cells[i] = new Array(cols);
 
             for (let j = 0; j < cols; j++) {
-                this.cells[i][j] = new Cell(Math.random() < 0.5);
+                this.cells[i][j] = new Cell(Math.random() < initialProbability);
             }
         }
     }
@@ -24,7 +27,7 @@ export class Grid {
     }
 
     getCell(row: number, col: number): Cell {
-        if (row >= 0 && row < this.numRows && col >= 0 && col < this.numCols) {
+        if (this.boundaryChecker.isWithinBoundaries(row, col)) {
             return this.cells[row][col];
         }
 
@@ -38,12 +41,11 @@ export class Grid {
             for (let j = -1; j <= 1; j++) {
                 // Skip the current cell itself
                 if (i === 0 && j === 0) continue;
+
                 const neighborRow = row + i;
                 const neighborCol = col + j;
-            
-                // Check if cell is within the grid boundaries
-                if (neighborRow >= 0 && neighborRow < this.numRows &&
-                    neighborCol >= 0 && neighborCol < this.numCols) {
+
+                if (this.boundaryChecker.isWithinBoundaries(neighborRow, neighborCol)) {
                     neighbors.push(this.getCell(neighborRow, neighborCol));
                 }
             }
