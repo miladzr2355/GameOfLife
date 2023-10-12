@@ -1,11 +1,11 @@
 import { CellRule } from "rules/CellRule";
 
 export class OverPopulationRule implements CellRule {
-  applies = (isAlive: boolean): boolean => {
-    return isAlive;
-  };
+	applies = (isAlive: boolean): boolean => {
+		return isAlive;
+	};
 
-  shouldLive = (numberOfLivingNeighbours: number): boolean => {
-    return numberOfLivingNeighbours < 4;
-  };
+	shouldLive = (numberOfLivingNeighbours: number): boolean => {
+		return numberOfLivingNeighbours < 4;
+	};
 }

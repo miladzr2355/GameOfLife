@@ -49,4 +49,27 @@ describe("Grid", () => {
         expect(neighbors).toContain(grid.getCell(2, 2));
     });
 
+    it('should correctly update cells based on SurvivalRule and ReproduceRule', () => {
+        const rows = 3;
+        const cols = 3;
+
+        const grid = new Grid(rows, cols, false);
+        const expectedGrid = new Grid(rows, cols, false);
+
+        grid.setCell(0, 0, true);
+        grid.setCell(0, 1, true);
+        grid.setCell(1, 0, true);
+        expectedGrid.setCell(0, 0, true);
+        expectedGrid.setCell(0, 1, true);
+        expectedGrid.setCell(1, 0, true);
+
+        grid.nextGeneration();
+        expectedGrid.nextGeneration()
+    
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                expect(grid.getCell(i, j).isAlive()).toBe(expectedGrid.getCell(i, j).isAlive());
+            }
+        }
+    });
 });

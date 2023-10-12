@@ -3,7 +3,7 @@ export class Cell {
 
 	constructor(_alive: boolean = false) {
 		this.alive = _alive;
-	}	
+	}
 
 	isAlive = () => this.alive;
 
