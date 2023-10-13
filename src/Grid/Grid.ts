@@ -65,6 +65,10 @@ export class Grid {
         this.cells[row][col] = new Cell(isAlive);
     }
 
+    toggleCell(row: number, col: number): void{
+        this.cells[row][col].toggleLivingStatus();
+    };
+
     getNeighbors(row: number, col: number): Cell[] {
         const neighbors: Cell[] = [];
       

@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
+    "parcel-bundler": "^1.12.5",
     "wallaby": "^1.0.1"
   }
 }
