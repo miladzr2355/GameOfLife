@@ -1,4 +1,5 @@
 import { Grid } from "../grid/Grid";
+import { Cell } from '../cell/Cell';
 
 describe("Grid", () => {
     const numRows = 3;
@@ -49,7 +50,7 @@ describe("Grid", () => {
         expect(neighbors).toContain(grid.getCell(2, 2));
     });
 
-    it('should correctly update cells based on SurvivalRule and ReproduceRule', () => {
+    it('should correctly update cells based on the game rules', () => {
         const rows = 3;
         const cols = 3;
 
@@ -71,5 +72,19 @@ describe("Grid", () => {
                 expect(grid.getCell(i, j).isAlive()).toBe(expectedGrid.getCell(i, j).isAlive());
             }
         }
+    });
+
+    it('should create a new living cell', () => {
+        const rows = 3;
+        const cols = 3;
+        const grid = new Grid(rows, cols, false);
+        grid.setCell(0, 0, true);
+        grid.setCell(0, 1, true);
+        grid.setCell(1, 0, true);
+        const expectedCell = new Cell(true);
+    
+        const newCell = grid.createNewCell(1, 1);
+    
+        expect(newCell.isAlive()).toBe(expectedCell.isAlive());
     });
 });
