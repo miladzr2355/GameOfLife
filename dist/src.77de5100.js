@@ -283,6 +283,12 @@ exports.OverPopulationRule = OverPopulationRule;
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
@@ -354,14 +360,15 @@ var Grid = /*#__PURE__*/function () {
     key: "getNeighbors",
     value: function getNeighbors(row, col) {
       var neighbors = [];
-      for (var i = -1; i <= 1; i++) {
-        for (var j = -1; j <= 1; j++) {
-          if (i === 0 && j === 0) continue;
-          var neighborRow = row + i;
-          var neighborCol = col + j;
-          if (this.boundaryChecker.isWithinBoundaries(neighborRow, neighborCol)) {
-            neighbors.push(this.getCell(neighborRow, neighborCol));
-          }
+      var neighborOffsets = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+      for (var _i = 0, _neighborOffsets = neighborOffsets; _i < _neighborOffsets.length; _i++) {
+        var _neighborOffsets$_i = _slicedToArray(_neighborOffsets[_i], 2),
+          offsetRow = _neighborOffsets$_i[0],
+          offsetCol = _neighborOffsets$_i[1];
+        var neighborRow = row + offsetRow;
+        var neighborCol = col + offsetCol;
+        if (this.boundaryChecker.isWithinBoundaries(neighborRow, neighborCol)) {
+          neighbors.push(this.getCell(neighborRow, neighborCol));
         }
       }
       return neighbors;
@@ -407,6 +414,7 @@ var canvas = document.querySelector("#game");
 var width = canvas.width;
 var height = canvas.height;
 var context = canvas.getContext("2d");
+var initialPopulationDensityProbability = 0.3;
 var cellSize = 20;
 var numRows = width / cellSize;
 var numCols = height / cellSize;
@@ -473,7 +481,7 @@ var toggleGamePaused = function toggleGamePaused() {
   isGamePaused = !isGamePaused;
 };
 var setGridRandomPopulationDencity = function setGridRandomPopulationDencity() {
-  grid = new Grid_1.Grid(numRows, numCols, true, 0.3);
+  grid = new Grid_1.Grid(numRows, numCols, true, initialPopulationDensityProbability);
 };
 canvas === null || canvas === void 0 ? void 0 : canvas.addEventListener("click", function (e) {
   var xPos = Math.floor((e.clientX - canvas.offsetLeft) / cellSize);
@@ -487,13 +495,17 @@ var handleStartButtonClick = function handleStartButtonClick() {
 };
 var handlePauseButtonClick = function handlePauseButtonClick() {
   toggleGamePaused();
+  var pauseBtn = document.querySelector(".pause-btn");
+  if (pauseBtn) {
+    pauseBtn.innerHTML = isGamePaused ? "Resume" : "Pause";
+  }
 };
 var handleRandomGridButtonClick = function handleRandomGridButtonClick() {
   setGridRandomPopulationDencity();
 };
 var handleClearButtonClick = function handleClearButtonClick() {
-  window.location.reload();
   clear();
+  window.location.reload();
 };
 startButton === null || startButton === void 0 ? void 0 : startButton.addEventListener("click", handleStartButtonClick);
 pauseButton === null || pauseButton === void 0 ? void 0 : pauseButton.addEventListener("click", handlePauseButtonClick);
@@ -525,7 +537,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57230" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50501" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -72,17 +72,18 @@ export class Grid {
     getNeighbors(row: number, col: number): Cell[] {
         const neighbors: Cell[] = [];
       
-        for (let i = -1; i <= 1; i++) {
-            for (let j = -1; j <= 1; j++) {
-                // Skip the current cell itself
-                if (i === 0 && j === 0) continue;
-
-                const neighborRow = row + i;
-                const neighborCol = col + j;
-
-                if (this.boundaryChecker.isWithinBoundaries(neighborRow, neighborCol)) {
-                    neighbors.push(this.getCell(neighborRow, neighborCol));
-                }
+        const neighborOffsets = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1],           [0, 1],
+            [1, -1],  [1, 0],  [1, 1]
+        ];
+        
+        for (const [offsetRow, offsetCol] of neighborOffsets) {
+            const neighborRow = row + offsetRow;
+            const neighborCol = col + offsetCol;
+        
+            if (this.boundaryChecker.isWithinBoundaries(neighborRow, neighborCol)) {
+                neighbors.push(this.getCell(neighborRow, neighborCol));
             }
         }
       

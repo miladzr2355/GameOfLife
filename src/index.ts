@@ -6,6 +6,7 @@ const width  = canvas.width;
 const height = canvas.height;
 const context = canvas.getContext("2d");
 
+const initialPopulationDensityProbability = 0.3;
 const cellSize = 20;
 const numRows = width / cellSize;
 const numCols = height / cellSize;
@@ -88,7 +89,7 @@ const toggleGamePaused = () => {
 }
 
 const setGridRandomPopulationDencity = () => {
-    grid = new Grid(numRows, numCols, true, 0.3);
+    grid = new Grid(numRows, numCols, true, initialPopulationDensityProbability);
 }
 
 canvas?.addEventListener("click", e => {
@@ -105,6 +106,12 @@ const handleStartButtonClick = () => {
 
 const handlePauseButtonClick = () => {
     toggleGamePaused();
+
+    const pauseBtn = document.querySelector(".pause-btn");
+
+    if (pauseBtn) {
+        pauseBtn.innerHTML = isGamePaused ? "Resume" : "Pause";
+    }
 };
 
 const handleRandomGridButtonClick = () => {
@@ -112,10 +119,9 @@ const handleRandomGridButtonClick = () => {
 };
 
 const handleClearButtonClick = () => {
-    window.location.reload();
     clear();
+    window.location.reload();
 };
-
 
 startButton?.addEventListener("click", handleStartButtonClick);
 pauseButton?.addEventListener("click", handlePauseButtonClick);
