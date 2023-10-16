@@ -17,7 +17,7 @@ const pauseButton = document.querySelector(".pause-btn");
 const randomGridButton = document.querySelector(".random-grid-btn");
 const clearButton = document.querySelector(".clear-btn");
 const increaseSpeedBtn = document.querySelector(".increase-speed-btn");
-const decreaseSpeedBtn = document.querySelector(".decrease-speed-btn")
+const decreaseSpeedBtn = document.querySelector(".decrease-speed-btn");
 
 let grid = new Grid(numRows, numCols, false);
 let game = new GameOfLife();
@@ -136,6 +136,5 @@ startButton?.addEventListener("click", handleStartButtonClick);
 pauseButton?.addEventListener("click", handlePauseButtonClick);
 randomGridButton?.addEventListener("click", handleRandomGridButtonClick);
 clearButton?.addEventListener("click", handleClearButtonClick);
-
 
 setContext()
