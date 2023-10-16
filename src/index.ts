@@ -1,4 +1,5 @@
 import { Grid } from "./grid/Grid";
+import { GameOfLife } from "./gameOfLife/GameOfLife";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#game");
 
@@ -15,10 +16,11 @@ const startButton = document.querySelector(".start-btn");
 const pauseButton = document.querySelector(".pause-btn");
 const randomGridButton = document.querySelector(".random-grid-btn");
 const clearButton = document.querySelector(".clear-btn");
+const increaseSpeedBtn = document.querySelector(".increase-speed-btn");
+const decreaseSpeedBtn = document.querySelector(".decrease-speed-btn")
 
 let grid = new Grid(numRows, numCols, false);
-
-let isGamePaused = false;
+let game = new GameOfLife();
 
 grid.setCell(0, 1, true);
 grid.setCell(1, 2, true);
@@ -73,7 +75,7 @@ const drawAll = () => {
 }
 
 const nextGen = () => {
-    if(isGamePaused) return;
+    if(game.isGamePaused) return;
 
     grid.nextGeneration();
     drawAll();
@@ -81,11 +83,11 @@ const nextGen = () => {
 
 const gameLoop = () => {
     nextGen();
-    setTimeout(gameLoop, 100);
+    setTimeout(gameLoop, game.getGameSpeed());
 }
 
 const toggleGamePaused = () => {
-    isGamePaused = !isGamePaused;
+    game.toggleGamePaused();
 }
 
 const setGridRandomPopulationDencity = () => {
@@ -110,7 +112,7 @@ const handlePauseButtonClick = () => {
     const pauseBtn = document.querySelector(".pause-btn");
 
     if (pauseBtn) {
-        pauseBtn.innerHTML = isGamePaused ? "Resume" : "Pause";
+        pauseBtn.innerHTML = game.isGamePaused ? "Resume" : "Pause";
     }
 };
 
@@ -123,9 +125,17 @@ const handleClearButtonClick = () => {
     window.location.reload();
 };
 
+const handleSpeedChange = (newSpeed: number) => {
+    let currentGameSpeed = game.getGameSpeed();
+    game.setGameSpeed(currentGameSpeed += newSpeed);
+}
+
+increaseSpeedBtn?.addEventListener("click", () => handleSpeedChange(-10));
+decreaseSpeedBtn?.addEventListener("click", () =>  handleSpeedChange(10));
 startButton?.addEventListener("click", handleStartButtonClick);
 pauseButton?.addEventListener("click", handlePauseButtonClick);
 randomGridButton?.addEventListener("click", handleRandomGridButtonClick);
 clearButton?.addEventListener("click", handleClearButtonClick);
+
 
 setContext()

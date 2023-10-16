@@ -403,13 +403,58 @@ var Grid = /*#__PURE__*/function () {
   return Grid;
 }();
 exports.Grid = Grid;
-},{"../cell/Cell":"cell/Cell.ts","../utility/GridBoundaryChecker":"utility/GridBoundaryChecker.ts","../rules/SurvivalRule/SurvivalRule":"rules/SurvivalRule/SurvivalRule.ts","../rules/ReproduceRule/ReproduceRule":"rules/ReproduceRule/ReproduceRule.ts","../rules/SolitudeRule/SolitudeRule":"rules/SolitudeRule/SolitudeRule.ts","../rules/OverPopulationRule/OverPopulationRule":"rules/OverPopulationRule/OverPopulationRule.ts"}],"index.ts":[function(require,module,exports) {
+},{"../cell/Cell":"cell/Cell.ts","../utility/GridBoundaryChecker":"utility/GridBoundaryChecker.ts","../rules/SurvivalRule/SurvivalRule":"rules/SurvivalRule/SurvivalRule.ts","../rules/ReproduceRule/ReproduceRule":"rules/ReproduceRule/ReproduceRule.ts","../rules/SolitudeRule/SolitudeRule":"rules/SolitudeRule/SolitudeRule.ts","../rules/OverPopulationRule/OverPopulationRule":"rules/OverPopulationRule/OverPopulationRule.ts"}],"gameOfLife/GameOfLife.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GameOfLife = void 0;
+var GameOfLife = /*#__PURE__*/function () {
+  function GameOfLife() {
+    var initialSpeed = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
+    _classCallCheck(this, GameOfLife);
+    this.gameSpeed = initialSpeed;
+    this.isGamePaused = false;
+  }
+  _createClass(GameOfLife, [{
+    key: "getGameSpeed",
+    value: function getGameSpeed() {
+      return this.gameSpeed;
+    }
+  }, {
+    key: "setGameSpeed",
+    value: function setGameSpeed(speed) {
+      this.gameSpeed = speed;
+    }
+  }, {
+    key: "getIsGamePaused",
+    value: function getIsGamePaused() {
+      return this.isGamePaused;
+    }
+  }, {
+    key: "toggleGamePaused",
+    value: function toggleGamePaused() {
+      this.isGamePaused = !this.isGamePaused;
+    }
+  }]);
+  return GameOfLife;
+}();
+exports.GameOfLife = GameOfLife;
+},{}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var Grid_1 = require("./grid/Grid");
+var GameOfLife_1 = require("./gameOfLife/GameOfLife");
 var canvas = document.querySelector("#game");
 var width = canvas.width;
 var height = canvas.height;
@@ -422,8 +467,10 @@ var startButton = document.querySelector(".start-btn");
 var pauseButton = document.querySelector(".pause-btn");
 var randomGridButton = document.querySelector(".random-grid-btn");
 var clearButton = document.querySelector(".clear-btn");
+var increaseSpeedBtn = document.querySelector(".increase-speed-btn");
+var decreaseSpeedBtn = document.querySelector(".decrease-speed-btn");
 var grid = new Grid_1.Grid(numRows, numCols, false);
-var isGamePaused = false;
+var game = new GameOfLife_1.GameOfLife();
 grid.setCell(0, 1, true);
 grid.setCell(1, 2, true);
 grid.setCell(2, 0, true);
@@ -469,16 +516,16 @@ var drawAll = function drawAll() {
   drawGridBorders();
 };
 var nextGen = function nextGen() {
-  if (isGamePaused) return;
+  if (game.isGamePaused) return;
   grid.nextGeneration();
   drawAll();
 };
 var gameLoop = function gameLoop() {
   nextGen();
-  setTimeout(gameLoop, 100);
+  setTimeout(gameLoop, game.getGameSpeed());
 };
 var toggleGamePaused = function toggleGamePaused() {
-  isGamePaused = !isGamePaused;
+  game.toggleGamePaused();
 };
 var setGridRandomPopulationDencity = function setGridRandomPopulationDencity() {
   grid = new Grid_1.Grid(numRows, numCols, true, initialPopulationDensityProbability);
@@ -497,7 +544,7 @@ var handlePauseButtonClick = function handlePauseButtonClick() {
   toggleGamePaused();
   var pauseBtn = document.querySelector(".pause-btn");
   if (pauseBtn) {
-    pauseBtn.innerHTML = isGamePaused ? "Resume" : "Pause";
+    pauseBtn.innerHTML = game.isGamePaused ? "Resume" : "Pause";
   }
 };
 var handleRandomGridButtonClick = function handleRandomGridButtonClick() {
@@ -507,12 +554,22 @@ var handleClearButtonClick = function handleClearButtonClick() {
   clear();
   window.location.reload();
 };
+var handleSpeedChange = function handleSpeedChange(newSpeed) {
+  var currentGameSpeed = game.getGameSpeed();
+  game.setGameSpeed(currentGameSpeed += newSpeed);
+};
+increaseSpeedBtn === null || increaseSpeedBtn === void 0 ? void 0 : increaseSpeedBtn.addEventListener("click", function () {
+  return handleSpeedChange(-10);
+});
+decreaseSpeedBtn === null || decreaseSpeedBtn === void 0 ? void 0 : decreaseSpeedBtn.addEventListener("click", function () {
+  return handleSpeedChange(10);
+});
 startButton === null || startButton === void 0 ? void 0 : startButton.addEventListener("click", handleStartButtonClick);
 pauseButton === null || pauseButton === void 0 ? void 0 : pauseButton.addEventListener("click", handlePauseButtonClick);
 randomGridButton === null || randomGridButton === void 0 ? void 0 : randomGridButton.addEventListener("click", handleRandomGridButtonClick);
 clearButton === null || clearButton === void 0 ? void 0 : clearButton.addEventListener("click", handleClearButtonClick);
 setContext();
-},{"./grid/Grid":"grid/Grid.ts"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./grid/Grid":"grid/Grid.ts","./gameOfLife/GameOfLife":"gameOfLife/GameOfLife.ts"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -537,7 +594,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50501" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63800" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -14,6 +14,15 @@ body {
     box-sizing: border-box; 
 }
 
+.change-speed-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box; 
+}
+
 .canvas-div {
     flex: 1;
 }
@@ -39,4 +48,9 @@ body {
 
 .btn-div button:hover {
     background-color: #555;
+}
+
+.btn-div p {
+    background-color: #333; 
+    color: white;
 }
